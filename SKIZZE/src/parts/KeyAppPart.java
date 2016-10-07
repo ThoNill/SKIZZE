@@ -14,10 +14,13 @@ import model.SkizzenListener;
 import model.teile.FontTeil;
 import model.teile.SkizzenTeil;
 import model.teile.TextTeil;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import userinterface.FontChooser;
 import action.AddAction;
 import action.DelKeyAction;
-
 
 /**
  * eingegebene Zeichen abfangen und in die Skitze einfügen
@@ -26,116 +29,127 @@ import action.DelKeyAction;
  *
  */
 public class KeyAppPart extends AppPart implements MouseListener, KeyListener,
-		SkizzenListener, PropertyChangeListener {
-	private FontChooser fontChooser;
+        SkizzenListener, PropertyChangeListener {
+    private static final Logger LOG = LogManager.getLogger(KeyAppPart.class);
 
-	private int x = 0;
+    private FontChooser fontChooser;
 
-	private int x0 = 0;
+    private int x = 0;
 
-	private int y = 0;
+    private int x0 = 0;
 
-	private int y0 = 0;
+    private int y = 0;
 
-	public KeyAppPart(AppControler appc) {
-		super(appc, "key");
-	}
+    private int y0 = 0;
 
-	public void addComponents() {
-		fontChooser = new FontChooser();
-		fontChooser.addPropertyChangeListener(this);
-		getUi().getInternToolBar().add(fontChooser);
-		getSkitze().addMouseListener(this);
-		getSkitze().addKeyListener(this);
-	}
+    public KeyAppPart(AppControler appc) {
+        super(appc, "key");
+    }
 
-	public void mouseClicked(MouseEvent arg0) {
-	}
+    @Override
+    public void addComponents() {
+        fontChooser = new FontChooser();
+        fontChooser.addPropertyChangeListener(this);
+        getUi().getInternToolBar().add(fontChooser);
+        getSkitze().addMouseListener(this);
+        getSkitze().addKeyListener(this);
+    }
 
-	public void mouseEntered(MouseEvent arg0) {
-	}
+    @Override
+    public void mouseClicked(MouseEvent arg0) {
+    }
 
-	public void mouseExited(MouseEvent arg0) {
-	}
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+    }
 
-	public void mousePressed(MouseEvent arg0) {
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+    }
 
-		if (arg0.getButton() == MouseEvent.BUTTON1) {
-			x0 = arg0.getX();
-			y0 = arg0.getY();
-			x = x0;
-			y = y0;
-			getUi().focusSkitze();
-		}
+    @Override
+    public void mousePressed(MouseEvent arg0) {
 
-	}
+        if (arg0.getButton() == MouseEvent.BUTTON1) {
+            x0 = arg0.getX();
+            y0 = arg0.getY();
+            x = x0;
+            y = y0;
+            getUi().focusSkitze();
+        }
 
-	public void mouseReleased(MouseEvent arg0) {
-	}
+    }
 
-	public void keyPressed(KeyEvent arg0) {
-	}
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+    }
 
-	public void keyReleased(KeyEvent arg0) {
-	}
+    @Override
+    public void keyPressed(KeyEvent arg0) {
+    }
 
-	public void keyTyped(KeyEvent arg0) {
-		try {
-			char c = arg0.getKeyChar();
-			SkizzenTeil t = null;
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+    }
 
-			Font font = fontChooser.getChooseFont();
-			font = font.deriveFont(fontChooser.getFontSize());
+    @Override
+    public void keyTyped(KeyEvent arg0) {
+        try {
+            char c = arg0.getKeyChar();
+            SkizzenTeil t = null;
 
-			if (c == KeyEvent.VK_ENTER) {
-				Rectangle2D r = font.getStringBounds("X", getAppc().getModel()
-						.getFontContext());
-				y += r.getHeight();
-				x = x0;
-			} else if (c == KeyEvent.VK_BACK_SPACE) {
-				getAppc().getActionControler().addElement(new DelKeyAction());
-			} else {
-				String text = new String(new char[] { c });
+            Font font = fontChooser.getChooseFont();
+            font = font.deriveFont(fontChooser.getFontSize());
 
-				t = new TextTeil(x, y, text);
+            if (c == KeyEvent.VK_ENTER) {
+                Rectangle2D r = font.getStringBounds("X", getAppc().getModel()
+                        .getFontContext());
+                y += r.getHeight();
+                x = x0;
+            } else if (c == KeyEvent.VK_BACK_SPACE) {
+                getAppc().getActionControler().addElement(new DelKeyAction());
+            } else {
+                String text = new String(new char[] { c });
 
-				Rectangle2D r = font.getStringBounds(text, getAppc().getModel()
-						.getFontContext());
-				x += r.getWidth();
-				getAppc().getActionControler().addElement(new AddAction(t));
-			}
+                t = new TextTeil(x, y, text);
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+                Rectangle2D r = font.getStringBounds(text, getAppc().getModel()
+                        .getFontContext());
+                x += r.getWidth();
+                getAppc().getActionControler().addElement(new AddAction(t));
+            }
 
-	}
+        } catch (Exception ex) {
+            LOG.error("Key Eingabe mit Ausnahme", ex);
+        }
 
-	public FontTeil getFontTeil() {
-		return new FontTeil(fontChooser.getChooseFont(),fontChooser.getFontSize());
-	}
+    }
 
-	public void perform(Class cl, SkizzenEvent ev) {
-		SkizzenTeil t = ev.getPart();
-		if (ev.getStatus() == SkizzenEvent.DELETED && cl == TextTeil.class) {
-			TextTeil textTeil = (TextTeil) t;
-			x = textTeil.getX();
-			y = textTeil.getY();
-		}
-		if (ev.getStatus() == SkizzenEvent.ADDED && cl == FontTeil.class) {
-			FontTeil fontTeil = (FontTeil) t;
-			fontChooser.setChooseFont(fontTeil);
-			
-		}
+    public FontTeil getFontTeil() {
+        return new FontTeil(fontChooser.getChooseFont(),
+                fontChooser.getFontSize());
+    }
 
-	}
+    @Override
+    public void perform(Class cl, SkizzenEvent ev) {
+        SkizzenTeil t = ev.getPart();
+        if (ev.getStatus() == SkizzenEvent.DELETED && cl == TextTeil.class) {
+            TextTeil textTeil = (TextTeil) t;
+            x = textTeil.getX();
+            y = textTeil.getY();
+        }
+        if (ev.getStatus() == SkizzenEvent.ADDED && cl == FontTeil.class) {
+            FontTeil fontTeil = (FontTeil) t;
+            fontChooser.setChooseFont(fontTeil);
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		getAppc().setFontTeil(getFontTeil());
-		
-	}
+        }
 
+    }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        getAppc().setFontTeil(getFontTeil());
+
+    }
 
 }

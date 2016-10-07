@@ -21,60 +21,60 @@ import userinterface.UserInterface;
  */
 
 public class AppPart implements ActionListener {
-	private String name;
-	private AppControler appc;
+    private String name;
+    private AppControler appc;
 
+    public AppPart(AppControler appc, String name) {
+        this.name = name;
+        this.appc = appc;
+    }
 
-	public AppPart(AppControler appc,String name) {
-		this.name = name;
-		this.appc = appc;
-	}
+    public AppControler getAppc() {
+        return appc;
+    }
 
-	public AppControler getAppc() {
-		return appc;
-	}
-	
-	public UserInterface getUi() {
-		return appc.getUi();
-	}
-	
-	public SkizzeComponent getSkitze() {
-		return getUi().getSkitze();
-	}
-	
-	public Skizze getSModel() {
-		return appc.getModel();
-	}
+    public UserInterface getUi() {
+        return appc.getUi();
+    }
 
-	public void addComponents() {
-		addMenu(getName());
-	}
+    public SkizzeComponent getSkitze() {
+        return getUi().getSkitze();
+    }
 
-	public void addMenu(String name) {
-		JMenuBar mb = appc.getUi().getInternMenuBar();
-		JMenuItem item = new JMenuItem();
-		item.setActionCommand(name);
-		item.setText(NLS.getText(name));
-		item.addActionListener(this);
-		mb.add(item);
-	}
+    public Skizze getSModel() {
+        return appc.getModel();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void addComponents() {
+        addMenu(getName());
+    }
 
-	public void close() {
-	}
+    public void addMenu(String name) {
+        JMenuBar mb = appc.getUi().getInternMenuBar();
+        JMenuItem item = new JMenuItem();
+        item.setActionCommand(name);
+        item.setText(NLS.getText(name));
+        item.addActionListener(this);
+        mb.add(item);
+    }
 
-	public void actionPerformed(ActionEvent arg0) {
-	}
+    public String getName() {
+        return name;
+    }
 
-	public boolean safe() {
-		return true;
-	}
+    public void close() {
+    }
 
-	public boolean isDirty() {
-		return false;
-	}
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+    }
+
+    public boolean safe() {
+        return true;
+    }
+
+    public boolean isDirty() {
+        return false;
+    }
 
 }

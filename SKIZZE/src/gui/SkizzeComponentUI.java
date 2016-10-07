@@ -2,10 +2,9 @@ package gui;
 
 import javax.swing.plaf.ComponentUI;
 
-
 /**
  * 
- * Swing UI Klasse zu SkitzeComponent 
+ * Swing UI Klasse zu SkitzeComponent
  * 
  * @author Thomas Nill
  *

@@ -1,5 +1,5 @@
 package transport;
 
 public enum SocketStatus {
-	CREATED, RUNNING, STOPPED
+    CREATED, RUNNING, STOPPED
 }

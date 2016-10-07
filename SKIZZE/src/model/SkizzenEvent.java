@@ -2,39 +2,37 @@ package model;
 
 import model.teile.SkizzenTeil;
 
-
 /**
  * 
- * Nachrichten über die Änderung eines Models
- * werden vom Model versendet
+ * Nachrichten über die Änderung eines Models werden vom Model versendet
  * 
  * @author Thomas Nill
  *
  */
 public class SkizzenEvent {
-	public final static int ADDED = 1;
+    public final static int ADDED = 1;
 
-	public final static int DELETED = 2;
+    public final static int DELETED = 2;
 
-	public final static int CHANGED = 3;
-	
-	public final static int UPDATESTATUS = 4;
+    public final static int CHANGED = 3;
 
-	int status;
+    public final static int UPDATESTATUS = 4;
 
-	SkizzenTeil part;
+    int status;
 
-	public SkizzenEvent(int status, SkizzenTeil part) {
-		this.status = status;
-		this.part = part;
-	}
+    SkizzenTeil part;
 
-	public SkizzenTeil getPart() {
-		return part;
-	}
+    public SkizzenEvent(int status, SkizzenTeil part) {
+        this.status = status;
+        this.part = part;
+    }
 
-	public int getStatus() {
-		return status;
-	}
+    public SkizzenTeil getPart() {
+        return part;
+    }
+
+    public int getStatus() {
+        return status;
+    }
 
 }

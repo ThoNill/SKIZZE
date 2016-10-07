@@ -11,29 +11,29 @@ import model.Skizze;
  */
 public class ActionController {
 
-	private static final long serialVersionUID = -3511719626701471504L;
+    private static final long serialVersionUID = -3511719626701471504L;
 
-	protected Skizze model;
+    protected Skizze model;
 
-	public ActionController() {
+    public ActionController() {
 
-	}
+    }
 
-	public void addElement(SkizzeAction a) {
-		a.perform(model);
-	}
+    public void addElement(SkizzeAction a) {
+        a.perform(model);
+    }
 
-	public Skizze getModel() {
-		return model;
-	}
+    public Skizze getModel() {
+        return model;
+    }
 
-	public void setModel(Skizze model) {
-		this.model = model;
-	}
+    public void setModel(Skizze model) {
+        this.model = model;
+    }
 
-	public void close() {
-	}
+    public void close() {
+    }
 
-	public void start() {
-	}
+    public void start() {
+    }
 }

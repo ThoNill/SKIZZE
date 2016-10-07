@@ -1,83 +1,89 @@
 package transport;
 
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class SocketConnection  implements Runnable{
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-	protected ActionExecutor oac;
-	protected SocketStatus status;
-	private Vector<SocketListener> listener = new Vector<>();
+public abstract class SocketConnection implements Runnable {
+    private static final Logger LOG = LogManager
+            .getLogger(SocketConnection.class);
 
-	public SocketConnection(ActionExecutor oac) {
-		super();
-		this.oac = oac;
-		this.status = SocketStatus.CREATED;
-	}
+    protected ActionExecutor oac;
+    protected SocketStatus status;
+    private List<SocketListener> listener = new ArrayList<>();
 
-	public void addSocketListener(SocketListener l) {
-		listener.addElement(l);
-		l.statusChanged(new SocketEvent(this.status,this));
-	}
+    public SocketConnection(ActionExecutor oac) {
+        super();
+        this.oac = oac;
+        this.status = SocketStatus.CREATED;
+    }
 
-	public void removeSocketListener(SocketListener l) {
-		listener.removeElement(l);
-	}
+    public void addSocketListener(SocketListener l) {
+        listener.add(l);
+        l.statusChanged(new SocketEvent(this.status, this));
+    }
 
-	public void fire(SocketEvent ev) {
-		for (SocketListener l : listener) {
-			l.statusChanged(ev);
-		}
-	}
+    public void removeSocketListener(SocketListener l) {
+        listener.remove(l);
+    }
 
-	public void setStatus(SocketStatus status) {
-		if (this.status.equals(status)) return;
-		
-		this.status = status;
-		fire(new SocketEvent(this.status,this));
-	}
+    public void fire(SocketEvent ev) {
+        for (SocketListener l : listener) {
+            l.statusChanged(ev);
+        }
+    }
 
-	public void perform(Object a) {
-		oac.perform(a);
-	}
+    public void setStatus(SocketStatus status) {
+        if (this.status.equals(status))
+            return;
 
-	public void run() {
-		setStatus(SocketStatus.RUNNING);
-		try {
-			while (status == SocketStatus.RUNNING) {
-				try {
-					sleepALittle();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				read();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		close();
-	}
+        this.status = status;
+        fire(new SocketEvent(this.status, this));
+    }
 
-	protected void sleepALittle() throws InterruptedException {
-		Thread.sleep(200);
-	}
+    public void perform(Object a) {
+        oac.perform(a);
+    }
 
-	public void start() {
-		Thread t = new Thread(this);
-		t.start();
-		return;
-	}
+    @Override
+    public void run() {
+        setStatus(SocketStatus.RUNNING);
+        try {
+            while (status == SocketStatus.RUNNING) {
+                try {
+                    sleepALittle();
+                } catch (InterruptedException e) {
+                    LOG.error("Interrupt in run", e);
+                    Thread.currentThread().interrupt();
+                }
+                read();
+            }
+        } catch (Exception ex) {
+            LOG.error("Exception in run", ex);
+        }
+        close();
+    }
 
-	protected void debug(String text) {
-	//	System.out.println("server client " + text);
-	
-	}
-	
-	public void close() {
-		setStatus(SocketStatus.STOPPED);
-	}
-	
-	public abstract void writeObject(Object a);
-	protected void read() throws IOException, ClassNotFoundException {};
+    protected void sleepALittle() throws InterruptedException {
+        Thread.sleep(200);
+    }
+
+    public void start() {
+        Thread t = new Thread(this);
+        t.start();
+        return;
+    }
+
+    public void close() {
+        setStatus(SocketStatus.STOPPED);
+    }
+
+    public abstract void writeObject(Object a);
+
+    protected void read() throws IOException, ClassNotFoundException {
+    };
 
 }

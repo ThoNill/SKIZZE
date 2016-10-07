@@ -16,7 +16,6 @@ import parts.MiscAppPart;
 import transport.OnlineAppPart;
 import userinterface.UserInterface;
 
-
 /**
  * 
  * Die Anwendung Skitzen ertellen und über das Netz zusammenarbeiten
@@ -26,27 +25,26 @@ import userinterface.UserInterface;
  */
 public class Main {
 
-	public final static void main(String args[]) {
-		NLS.init();
-		UIManager.put("SkitzeComponentUI", "gui.DefaultSkitzeComponentUI");
+    public final static void main(String args[]) {
+        NLS.init();
+        UIManager.put("SkitzeComponentUI", "gui.DefaultSkitzeComponentUI");
 
-		AppControler appc = new AppControler();
-		UserInterface ui = new UserInterface();
-		appc.setUi(ui);
-		appc.addPart(new MiscAppPart(appc));
-		appc.addPart(new OnlineAppPart(appc));
-		appc.addPart(new DBAppPart(appc));
-		appc.addPart(new DrawAppPart(appc));
-		appc.addPart(new KeyAppPart(appc));
-		appc.addPart(new EndeAppPart(appc));
-		appc.addPart(new LineWithFontUpdater(appc));
-		appc.clearTheModelAction();
-		
+        AppControler appc = new AppControler();
+        UserInterface ui = new UserInterface();
+        appc.setUi(ui);
+        appc.addPart(new MiscAppPart(appc));
+        appc.addPart(new OnlineAppPart(appc));
+        appc.addPart(new DBAppPart(appc));
+        appc.addPart(new DrawAppPart(appc));
+        appc.addPart(new KeyAppPart(appc));
+        appc.addPart(new EndeAppPart(appc));
+        appc.addPart(new LineWithFontUpdater(appc));
+        appc.clearTheModelAction();
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
-		ui.setSize(dim);
-		ui.setVisible(true);
+        ui.setSize(dim);
+        ui.setVisible(true);
 
-	}
+    }
 }

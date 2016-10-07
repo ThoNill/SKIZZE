@@ -12,16 +12,17 @@ import model.teile.SkizzenTeil;
  */
 public class AddAction implements SkizzeAction {
 
-	private static final long serialVersionUID = -8122990391075266896L;
+    private static final long serialVersionUID = -8122990391075266896L;
 
-	private SkizzenTeil teil;
+    private SkizzenTeil teil;
 
-	public AddAction(SkizzenTeil teil) {
-		this.teil = teil;
-	}
+    public AddAction(SkizzenTeil teil) {
+        this.teil = teil;
+    }
 
-	public void perform(Skizze model) {
-		model.addElement(teil);
-	}
+    @Override
+    public void perform(Skizze model) {
+        model.addElement(teil);
+    }
 
 }

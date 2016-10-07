@@ -11,10 +11,11 @@ import model.Skizze;
  */
 public class ClearAktion implements SkizzeAction {
 
-	private static final long serialVersionUID = -6291680806478652222L;
+    private static final long serialVersionUID = -6291680806478652222L;
 
-	public void perform(Skizze model) {
-		model.clear();
-	}
+    @Override
+    public void perform(Skizze model) {
+        model.clear();
+    }
 
 }

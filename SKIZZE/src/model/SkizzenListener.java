@@ -2,7 +2,6 @@ package model;
 
 import java.util.EventListener;
 
-
 /**
  * 
  * Höhren auf Veränderungen in einer Skitze
@@ -11,5 +10,5 @@ import java.util.EventListener;
  *
  */
 public interface SkizzenListener extends EventListener {
-	public void perform(Class cl, SkizzenEvent ev);
+    public void perform(Class cl, SkizzenEvent ev);
 }

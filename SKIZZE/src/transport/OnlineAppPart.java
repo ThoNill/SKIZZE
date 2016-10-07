@@ -21,107 +21,108 @@ import action.TransferAction;
  */
 
 public class OnlineAppPart extends AppPart implements ActionListener {
-	private JButton bonline = null;
+    private JButton bonline = null;
 
-	private boolean online;
+    private boolean online;
 
-	private AppProperties prop;
+    private AppProperties prop;
 
-	public OnlineAppPart(AppControler appc) {
-		super(appc,"online");
-		setOnline(false);
-	}
+    public OnlineAppPart(AppControler appc) {
+        super(appc, "online");
+        setOnline(false);
+    }
 
-	public void addComponents() {
-		addMenu("prop");
-		addMenu("transfer");
+    @Override
+    public void addComponents() {
+        addMenu("prop");
+        addMenu("transfer");
 
-		bonline = new JButton();
-		bonline.setActionCommand("online");
-		bonline.addActionListener(this);
+        bonline = new JButton();
+        bonline.setActionCommand("online");
+        bonline.addActionListener(this);
 
-		getAppc().getUi().getInternToolBar().add(bonline);
-		setOnline(false);
-	};
+        getAppc().getUi().getInternToolBar().add(bonline);
+        setOnline(false);
+    };
 
-	public void actionPerformed(ActionEvent arg0) {
-		String command = arg0.getActionCommand();
-		if ("prop".equals(command)) {
-			PropertiesDialog d = new PropertiesDialog(getAppc().getUi(),
-					getProp());
-			d.setVisible(true);
-		}
-		;
-		if ("online".equals(command)) {
-			setOnline(!online);
-		}
-		if ("transfer".equals(arg0.getActionCommand())) {
-			transfer();
-		}
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        String command = arg0.getActionCommand();
+        if ("prop".equals(command)) {
+            PropertiesDialog d = new PropertiesDialog(getAppc().getUi(),
+                    getProp());
+            d.setVisible(true);
+        }
+        ;
+        if ("online".equals(command)) {
+            setOnline(!online);
+        }
+        if ("transfer".equals(arg0.getActionCommand())) {
+            transfer();
+        }
 
-	}
-	
-	public void setText(String text) {
-		if (bonline != null)
-			bonline.setText(text);
-	}
+    }
 
-	public void setOnline(boolean online) {
-		if (bonline != null)
-			bonline.setText(NLS.getText((online) ? "gooffline" : "goonline"));
+    public void setText(String text) {
+        if (bonline != null)
+            bonline.setText(text);
+    }
 
-		if (this.online == online)
-			return;
+    public void setOnline(boolean online) {
+        if (bonline != null)
+            bonline.setText(NLS.getText((online) ? "gooffline" : "goonline"));
 
-		this.online = online;
+        if (this.online == online)
+            return;
 
-		ActionController old = getAppc().getActionControler();
-		
-		if (old instanceof OnlineActionController) {
-			OnlineActionController ac = (OnlineActionController)old;
-			ac.close();
-		}
+        this.online = online;
 
-		if (online) {
-			OnlineActionController ac = new OnlineActionController(this);
-			ac.setPort(getProp().getPort());
-			ac.setHost(getProp().getHost());
-			getAppc().setActionControler(ac);
-		} else {
-			getAppc().setActionControler(new ActionController());
-		}
-		old.close();
+        ActionController old = getAppc().getActionControler();
 
-	}
+        if (old instanceof OnlineActionController) {
+            OnlineActionController ac = (OnlineActionController) old;
+            ac.close();
+        }
 
-	public void setMessage(String text) {
-		getAppc().getUi().setMessage(text);
-	}
+        if (online) {
+            OnlineActionController ac = new OnlineActionController(this);
+            ac.setPort(getProp().getPort());
+            ac.setHost(getProp().getHost());
+            getAppc().setActionControler(ac);
+        } else {
+            getAppc().setActionControler(new ActionController());
+        }
+        old.close();
 
-	public AppProperties getProp() {
-		if (prop == null) {
-			prop = new AppProperties();
-			prop.setHost("localhost");
-			prop.setPort(1234);
-		}
-		return prop;
-	}
+    }
 
-	public void setProp(AppProperties prop) {
-		this.prop = prop;
-	}
+    public void setMessage(String text) {
+        getAppc().getUi().setMessage(text);
+    }
 
-	public void close() {
-		setOnline(false);
-	}
+    public AppProperties getProp() {
+        if (prop == null) {
+            prop = new AppProperties();
+            prop.setHost("localhost");
+            prop.setPort(1234);
+        }
+        return prop;
+    }
 
-	public void transfer() {
-		if (this.online) {
-			getAppc().getActionControler().addElement(
-					new TransferAction(getAppc().getModel()));
-		}
-	}
+    public void setProp(AppProperties prop) {
+        this.prop = prop;
+    }
 
-	
+    @Override
+    public void close() {
+        setOnline(false);
+    }
+
+    public void transfer() {
+        if (this.online) {
+            getAppc().getActionControler().addElement(
+                    new TransferAction(getAppc().getModel()));
+        }
+    }
 
 }

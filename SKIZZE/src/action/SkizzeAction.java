@@ -12,5 +12,5 @@ import model.Skizze;
  *
  */
 public interface SkizzeAction extends Serializable {
-	public void perform(Skizze model);
+    public void perform(Skizze model);
 }
